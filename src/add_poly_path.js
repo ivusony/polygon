@@ -1,11 +1,12 @@
 function add_polygon_path(params){
     if (typeof params != 'object' || params == undefined)return;
 
-    window.new_polygon = [];
+    var new_polygon = [];
 
     var new_poly_path = [];
     var markers = [];
     var marker_id = 0;
+    // var last_line = [];
 
     google.maps.event.addListener(params.map, 'click', function (event) {
         var marker = new google.maps.Marker(
@@ -48,6 +49,8 @@ function add_polygon_path(params){
                 markers = [];
                 //reset counter
                 marker_id = 0;
+
+
             }
         });
 
