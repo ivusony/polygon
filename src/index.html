@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        /* Set the size of the div element that contains the map */
+
+        #map {
+            height: 400px;
+            /* The height is 400 pixels */
+            width: 50%;
+            /* The width is the width of the web page */
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>My Google Maps Demo</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+    <button class="save_new_poly" disabled="true">Save new poly</button>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBB1J_Py1VZtjUr2ohWgU_pmpuVgtN9WnY&callback=initMap"></script>
+
+    <script src="./draw_polygons.js"></script>
+    <script src="./add_poly_path.js"></script>
+
+    <script>
+        // Initialize and add the map
+        function initMap() {
+            // The location of Uluru
+            var gradiste = { lat: 45.53, lng: 20.01 };
+            // The map, centered at Uluru
+            var map = new google.maps.Map(
+                document.getElementById('map'), 
+                { 
+                    zoom: 10, 
+                    center: gradiste 
+                }
+            );
+
+            // // // The marker, positioned at Gradiste
+            // var bgd = new google.maps.Marker({ position: gradiste, map: map });
+
+
+             var polygon_paths = [
+                [
+                     { lat: 45.52678895484113, lng: 19.990212167006586 },
+                     { lat: 45.520414718863094, lng: 19.97939750025854 },
+                     { lat: 45.5117542224206, lng: 19.990555489760492 },
+                     { lat: 45.519211951839594, lng: 20.0073783047019 },
+                     { lat: 45.52678895484113, lng: 19.990212167006586 }
+                ]
+             ];
+
+             
+          
+
+            draw_polygons(polygon_paths, map)
+
+            add_polygon_path({
+                map : map
+            });
+
+
+           
+            
+            
+        }
+    </script>
+    
+
+   
+
+    <script>
+        
+    </script>
+</body>
+
+</html>
