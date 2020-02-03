@@ -1,7 +1,9 @@
 # polygon
 
-//initialize main function
-function initMap(){
+initialize main function
+
+ function initMap() { 
+ 
     //new map
     var map = new google.maps.Map(
           document.getElementById('map'),
