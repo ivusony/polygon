@@ -1,10 +1,14 @@
-# polygon
+# Google Maps polyline drawing tool
 
-initialize main function
+## Basic usage
 
+
+> main initMap function. Google maps api callback 
+
+``` 
  function initMap() { 
  
-    //new map
+    //initialize new Map
     var map = new google.maps.Map(
           document.getElementById('map'),
           {
@@ -12,38 +16,42 @@ initialize main function
               center: { lat: 45.53, lng: 20.01 }
           }
      );
-     //construct object
-      var DRAW = new GM_POLY_DRAW(map);
 
-      // DRAWING TEST POLYGONs
-      var polygon_paths = 
+    //create drawing object
+    var DRAW = new GM_POLY_DRAW(map);
+
+    // DRAWING TEST POLYGONs
+    var polygon_paths = 
+    [
       [
-        [
-          {},
-          {},
-          {}
-          ...
-        ],
-        [],
-        []
-      ]
+        {},
+        {},
+        {}
+        ...
+      ],
+      [],
+      []
+    ]
 
-      DRAW.polygons(polygon_paths);
+    // draw multiple polylines
+    DRAW.polygons(polygon_paths, params_object);
 
     var Init_Drawing_button = document.querySelector('.new_poly');
 
     Init_Drawing_button.addEventListener('click', function () {
 
-        DRAW.add_new_polygon({
-            map: map
-        }).then(function (poly) {
-            // do whatever you want with new poly path
-            DRAW.one_polygon(poly);
+      // init drawing. Returns new Promise
+      DRAW.add_new_polygon({
+          map: map,
+          markersVisible : true
+      }).then(function (poly) {
+          // do whatever you want with new poly path
+          DRAW.one_polygon(poly);
 
-            // send to DB
-        })
+          // send to DB
+      })
 
         this.innerText = "Save new polygon"
     })
 }
-     
+```
