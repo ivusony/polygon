@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        /* Set the size of the div element that contains the map */
+
+        #map {
+            height: 400px;
+            /* The height is 400 pixels */
+            width: 80%;
+            /* The width is the width of the web page */
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>My Google Maps Demo</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+    <button class="new_poly">Add new poly</button>
+    <input class="poly_name" type="text">
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initMap"></script>
+
+    
+
+    <script src="../dist/gm_poly_draw.js"></script>
+
+
+    <script>
+
+        function initMap(){
+
+            var map = new google.maps.Map(
+                document.getElementById('map'),
+                {
+                    zoom: 10,
+                    center: { lat: 45.53, lng: 20.01 },
+                    mapTypeId: 'satellite'
+                }
+            );
+            var DRAW = new GM_POLY_DRAW(map);
+
+
+            // DRAWING TEST POLYGONs
+            var polygon_paths = [
+                [
+                    { 
+                        lat: 45.52678895484113, 
+                        lng: 19.990212167006586 
+                    },
+                    { 
+                        lat: 45.520414718863094, 
+                        lng: 19.97939750025854 
+                    },
+                    {
+                        lat: 45.5117542224206, 
+                        lng: 19.990555489760492 
+                    },
+                    { 
+                        lat: 45.519211951839594, 
+                        lng: 20.0073783047019 
+                    },
+                    { 
+                        lat: 45.52678895484113, 
+                        lng: 19.990212167006586
+                    }
+                ]
+            ];
+
+
+            
+            DRAW.polygons(polygon_paths, {
+                color : 'yellow',
+                weight : 1,
+            });
+            // *******************************
+
+            var Init_Drawing_button = document.querySelector('.new_poly');
+
+            Init_Drawing_button.addEventListener('click', function () {
+
+                // initiate draw
+                DRAW.add_new_polygon({
+                    map: map,
+                    // label : "Polygon 1",
+                    markersVisible : true
+                }).then(function (poly) {
+                    // do whatever you want with new poly path
+
+                    // draw added polyline right away based on resolved path
+                    DRAW.one_polygon(poly, {
+                        color : 'yellow',
+                        weight : 2
+                    });
+
+                    // and / or save to DB
+                })
+
+                this.innerText = "Save new polygon"
+            })
+
+        }
+        
+
+
+       
+      
+    </script>
+    
+
+
+</body>
+
+</html>
