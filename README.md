@@ -3,12 +3,12 @@
 ## Usage
 
 
-> instantiate  new polydraw object in main initMap function
+### instantiate  new polydraw object in main initMap function
 ```
 var DRAW = new GM_POLY_DRAW(map);
 ```
 
-> draw multiple polylines based on paths without labels. 
+### draw multiple polylines based on paths without labels. 
 
 The array passed to the function must be the following format:
 [
@@ -28,7 +28,8 @@ The array passed to the function must be the following format:
 DRAW.polylines(polyline_paths : *required / array of arrays of polyline latLng objects* , params_object : *optional / set color, weight, opacity*) : *void*;
 ```
 
-> draw multiple polylines based on paths WITH labels. The labels will be shown in google map info windows pointing on the first marker
+### draw multiple polylines based on paths WITH labels. 
+> The labels will be shown in google map info windows pointing on the first marker
 
 The array passed to the function must be the following format:
 [
@@ -53,12 +54,13 @@ The array passed to the function must be the following format:
 DRAW.labeled_polylines(labeled_polylines : *required / array of objects including labels and coords* , params_object : *optional / set color, weight, opacity*) : *void*;
 ```
 
-> draw single polyline based on path without label
+### draw single polyline based on path without label
 ```
-DRAW.one_polygon(polyline_path : *required / array of polyline latLng objects*, params_object : *optiona / set color, weight, opacity*) : *void*;
+DRAW.polyline(polyline_path : *required / array of polyline latLng objects*, params_object : *optiona / set color, weight, opacity*) : *void*;
 ```
 
-> add new polyline path - returns a promise
+### add new polyline path 
+> returns a promise
 ```
 var new_polyline_path =  DRAW.new_polyline_path({map : *required / the map object*, markersVisible : *optional / boolean*}) : *new Promise*
 
@@ -68,9 +70,9 @@ new_polyline_path.then(new_path => {
 })
 ```
 
-> polilyne lables
+### polilyne lables
 
-You can hide all polyline labels (displayed in Info Windows) on the map or show them again with folowing methods:
+> You can hide all polyline labels (displayed in Info Windows) on the map or show them again with folowing methods:
 
 ```
 DRAW.remove_labels();
