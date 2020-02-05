@@ -1,43 +1,57 @@
-import * as gm_draw_one_polilyne from './lib/gm_draw_one_polyline';
-import * as polyline_config from './lib/polyline_config';
+import { labeledPolyline } from './lib/labeled_polyline';
+import { labeledPolylines } from './lib/labeled_polylines';
+
+var polyline_default_config = require('./lib/polyline_default').polyline_default;
+
+
 
 class GM_POLY_DRAW{
     constructor(map) {
         this.map = map;
+        this.infoWindows = [];
     }
     // DRAWING POLYLINES BASED ON LAT LNG COORDS
     // draw single polyline. Used in polyline complete event listener. 
     // accepts array of latLng objects
-    one_polygon(poly_path, params){
+    polyline(poly_path, params){
         if (!params) {
-            var params = polyline_config
+            var params = polyline_default_config
         }
         var poly = new google.maps.Polyline({
-            path: poly_path,
-            strokeColor: params.color || polyline_config.color,
-            strokeOpacity: params.opacity || polyline_config.opacity,
-            strokeWeight: params.weight || polyline_config.weight
+            path            : poly_path,
+            strokeColor     : params.color ,
+            strokeOpacity   : params.opacity ,
+            strokeWeight    : params.weight
         });
         poly.setMap(this.map);
-        // gm_draw_one_polilyne(poly_path, this.map);
     }
-    polygons(array_of_polygons_paths, params) {
-        if(!params){
-            var params = polyline_config
-        }
+
+    labeled_polyline(poly_path, params){
+        if (!params) { var params = {} }
+        labeledPolyline(poly_path, this.map, params);
+    }
+
+    polylines(array_of_polygons_paths, params) {
+        // if(!params){
+        //     var params = polyline_default_config
+        // }
         array_of_polygons_paths.forEach(polygon_path => {
             var poly = new google.maps.Polyline({
                 path            :   polygon_path,
-                strokeColor     :   params.color      ||  polyline_config.color,
-                strokeOpacity   :   params.opacity    ||  polyline_config.opacity,
-                strokeWeight    :   params.weight     ||  polyline_config.weight
+                strokeColor: params.color ? params.color : polyline_default_config.color,
+                strokeOpacity: params.opacity ? params.opacity : polyline_default_config.opacity ,
+                strokeWeight: params.weight ? params.weight : polyline_default_config.weight
             });
             poly.setMap(this.map);
         });
     }
 
+    labeled_polylines(array_of_polyline_paths, params){
+        if(!params){var params = {}}
+        labeledPolylines(array_of_polyline_paths, this, params);
+    }
 
-    add_new_polygon(params){
+    new_polyline_path(params){
         return new Promise(function (resolve, reject) {
             if (typeof params != 'object' || params == undefined) return;
 
@@ -179,6 +193,26 @@ class GM_POLY_DRAW{
         })
     }
 
+    remove_labels(){
+        if(this.infoWindows.length > 0)
+        {
+            this.infoWindows.forEach(iw=>{
+                iw.close();
+            })
+            return true
+        }
+        return false
+    }
+
+    show_labels(){
+        if (this.infoWindows.length > 0) {
+            this.infoWindows.forEach(iw => {
+                iw.open(this.map);
+            })
+            return true
+        }
+        return false
+    }
    
 
 }

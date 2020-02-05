@@ -25,7 +25,7 @@
     <button class="new_poly">Add new poly</button>
     <input class="poly_name" type="text">
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=APIkey&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjT899CjEqozHEpVj5hwzlwvOLqwAFDHI&callback=initMap"></script>
 
     
 
@@ -46,9 +46,8 @@
             );
             var DRAW = new GM_POLY_DRAW(map);
 
-
             // DRAWING TEST POLYGONs
-            var polygon_paths = [
+            var polyline = [
                 [
                     { 
                         lat: 45.52678895484113, 
@@ -73,12 +72,75 @@
                 ]
             ];
 
-
+            var labeled_polylines = [
+                {
+                    label: "Njiva 1",
+                    coords: [
+                        {
+                            lat: 45.513077934215396,
+                            lng: 19.910115202813866
+                        },
+                        {
+                            lat: 45.50090138076139,
+                            lng: 19.912234139106573
+                        },
+                        {
+                            lat: 45.50463108803787,
+                            lng: 19.937682938239874
+                        },
+                        {
+                            lat: 45.51494665259622,
+                            lng: 19.932189774177374
+                        },
+                        {
+                            lat: 45.513077934215396,
+                            lng: 19.910115202813866
+                        }
+                    ]
+                },
+                 {
+                    label: "Njiva 2",
+                    coords: [
+                        {
+                           lat: 45.5232321,
+                            lng: 19.9234341
+                        },
+                        {
+                            lat: 45.52,
+                            lng: 19.923
+                        },
+                        {
+                            lat: 45.51,
+                            lng: 19.95
+                        },
+                        {
+                            lat: 45.52,
+                            lng: 19.94
+                        },
+                        {
+                             lat: 45.5232321,
+                            lng: 19.9234341
+                        }
+                    ]
+                }
+            ]
+           
             
-            DRAW.polygons(polygon_paths, {
+            DRAW.polylines(polyline, {
                 color : 'yellow',
                 weight : 1,
+                opacity : 1
             });
+
+            DRAW.labeled_polylines(labeled_polylines, {
+                color: 'yellow',
+                weight: 1,
+                opacity: 1
+            });
+
+            // DRAW.labeled_polyline(labeled_polylines[0]);
+
+            
             // *******************************
 
             var Init_Drawing_button = document.querySelector('.new_poly');
@@ -86,15 +148,15 @@
             Init_Drawing_button.addEventListener('click', function () {
 
                 // initiate draw
-                DRAW.add_new_polygon({
+                DRAW.new_polyline_path({
                     map: map,
                     // label : "Polygon 1",
                     markersVisible : true
                 }).then(function (poly) {
                     // do whatever you want with new poly path
-
+                    console.log(poly);
                     // draw added polyline right away based on resolved path
-                    DRAW.one_polygon(poly, {
+                    DRAW.polyline(poly, {
                         color : 'yellow',
                         weight : 2
                     });
@@ -104,6 +166,8 @@
 
                 this.innerText = "Save new polygon"
             })
+
+
 
         }
         
