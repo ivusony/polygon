@@ -1,11 +1,35 @@
 # Google Maps polyline drawing tool
 
-## Basic usage
+## Usage
 
 
-> main initMap function. Google maps api callback 
+> instantiate  new polydraw object in main initMap function
+```
+var DRAW = new GM_POLY_DRAW(map);
+```
 
+> draw multiple polylines based on paths
 ``` 
+DRAW.polylines(polyline_paths : *required / array of arrays of polyline latLng objects* , params_object : *optional / set color, weight, opacity*) : *void*;
+```
+
+> draw single polyline based on path
+```
+DRAW.one_polygon(polyline_path : *required / array of polyline latLng objects*, params_object : *optiona / set color, weight, opacity*) : *void*;
+```
+
+> add new polyline path - returns a promise
+```
+var new_polyline_path =  DRAW.new_polyline_path({map : *required / the map object*, markersVisible : *optional / boolean*}) : *new Promise*
+
+new_polyline_path.then(new_path => {
+  *Do what you want with new path*
+   DRAW.one_polygon(poly);
+})
+```
+
+> example
+```
  function initMap() { 
  
     //initialize new Map
@@ -21,7 +45,7 @@
     var DRAW = new GM_POLY_DRAW(map);
 
     // DRAWING TEST POLYGONs
-    var polygon_paths = 
+    var polyline_paths = 
     [
       [
         {},
@@ -34,24 +58,24 @@
     ]
 
     // draw multiple polylines
-    DRAW.polygons(polygon_paths, params_object);
+    DRAW.polyline(polyline_paths, params_object);
 
     var Init_Drawing_button = document.querySelector('.new_poly');
 
     Init_Drawing_button.addEventListener('click', function () {
 
       // init drawing. Returns new Promise
-      DRAW.add_new_polygon({
+      DRAW.add_new_polyline({
           map: map,
           markersVisible : true
       }).then(function (poly) {
           // do whatever you want with new poly path
-          DRAW.one_polygon(poly);
+          DRAW.one_polyline(poly);
 
           // send to DB
       })
 
-        this.innerText = "Save new polygon"
+        this.innerText = "Save new polyline"
     })
 }
 ```
