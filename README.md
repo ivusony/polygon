@@ -28,7 +28,32 @@ The array passed to the function must be the following format:
 DRAW.polylines(polyline_paths : *required / array of arrays of polyline latLng objects* , params_object : *optional / set color, weight, opacity*) : *void*;
 ```
 
-> draw single polyline based on path
+> draw multiple polylines based on paths WITH labels. The labels will be shown in google map info windows pointing on the first marker
+
+The array passed to the function must be the following format:
+[
+ {
+   label : "Some label",
+   coords : [
+      {},
+      {},
+      {}
+   ]
+ },
+ {
+   label : "Some label 2",
+   coords : [
+     {},
+     {},
+     {}
+   ]
+ }
+]
+```
+DRAW.labeled_polylines(labeled_polylines : *required / array of objects including labels and coords* , params_object : *optional / set color, weight, opacity*) : *void*;
+```
+
+> draw single polyline based on path without label
 ```
 DRAW.one_polygon(polyline_path : *required / array of polyline latLng objects*, params_object : *optiona / set color, weight, opacity*) : *void*;
 ```
@@ -41,6 +66,18 @@ new_polyline_path.then(new_path => {
   *Do what you want with new path*
    DRAW.one_polygon(poly);
 })
+```
+
+> polilyne lables
+
+You can hide all polyline labels (displayed in Info Windows) on the map or show them again with folowing methods:
+
+```
+DRAW.remove_labels();
+```
+or
+```
+DRAW.show_labels();
 ```
 
 > example
