@@ -8,7 +8,22 @@
 var DRAW = new GM_POLY_DRAW(map);
 ```
 
-> draw multiple polylines based on paths
+> draw multiple polylines based on paths without labels. 
+
+The array passed to the function must be the following format:
+[
+  [
+    {coords},
+    {coords},
+    {coords}
+  ],
+  [
+    {coords},
+    {coords},
+    {coords}
+  ]
+]
+
 ``` 
 DRAW.polylines(polyline_paths : *required / array of arrays of polyline latLng objects* , params_object : *optional / set color, weight, opacity*) : *void*;
 ```
