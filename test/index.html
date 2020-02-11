@@ -18,14 +18,31 @@
 </head>
 
 <body>
-    <h3>My Google Maps Demo</h3>
-    <!--The div element for the map -->
-    <div id="map"></div>
+    <div class="container" style="width: 100%; white-space: nowrap; ">
+        <div style="width: 48%; display: inline-block; vertical-align: top">
+            <h1>Demo form</h1>
+            <button class="new_poly">Add new poly</button>
+            <br>
+            <form action="#" method="POST"  id="myform" style="margin-top: 1rem; display: none;">
+                <input type="text" placeholder="Optional polygon name">
+               
+            </form>
+ 
+            <button id="submit_btn" type="submit" form="myform" disabled="true">Save new polygon to DB</button>
+        </div>
 
-    <button class="new_poly">Add new poly</button>
-    <input class="poly_name" type="text">
+        <div style="width:48%; display: inline-block; vertical-align: top">
+             <h3>My Google Maps Demo</h3>
+            <!--The div element for the map -->
+            <div id="map"></div>
+        </div>
+    </div>
+   
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjT899CjEqozHEpVj5hwzlwvOLqwAFDHI&callback=initMap"></script>
+    <input class="poly_name" type="text"  placeholder="polygon name">
+    <input class="poly_content" type="text"  placeholder="polygon content">
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=API&callback=initMap"></script>
 
     
 
@@ -47,7 +64,7 @@
             var DRAW = new GM_POLY_DRAW(map);
 
             // DRAWING TEST POLYGONs
-            var polyline = [
+            var polygon = [
                 [
                     { 
                         lat: 45.52678895484113, 
@@ -72,7 +89,7 @@
                 ]
             ];
 
-            var labeled_polylines = [
+            var labeled_polygon = [
                 {
                     label: "Njiva 1",
                     coords: [
@@ -126,16 +143,20 @@
             ]
            
             
-            DRAW.polylines(polyline, {
-                color : 'yellow',
-                weight : 1,
-                opacity : 1
+            DRAW.polygons(polygon, {
+                fillColor: 'yellow',
+                strokeWeight: 1,
+                fillOpacity: .1,
+                strokeColor: 'green',
+                strokeOpacity: 1
             });
 
-            DRAW.labeled_polylines(labeled_polylines, {
-                color: 'yellow',
-                weight: 1,
-                opacity: 1
+            DRAW.labeled_polygons(labeled_polygon, {
+                fillColor: 'yellow',
+                strokeWeight: 1,
+                fillOpacity: .1,
+                strokeColor : 'green',
+                strokeOpacity : 1
             });
 
             // DRAW.labeled_polyline(labeled_polylines[0]);
@@ -144,33 +165,50 @@
             // *******************************
 
             var Init_Drawing_button = document.querySelector('.new_poly');
+            var submit_btn = document.getElementById('submit_btn');
+            var poly_name  = document.querySelector('.poly_name');
+            var poly_content = document.querySelector('.poly_content');
+
 
             Init_Drawing_button.addEventListener('click', function () {
 
+                var btn = this;
                 // initiate draw
-                DRAW.new_polyline_path({
+                DRAW.new_polygon({
                     map: map,
-                    // label : "Polygon 1",
-                    markersVisible : true
-                }).then(function (poly) {
+                    showOnEnd : true
+                }).then(poly => {
                     // do whatever you want with new poly path
-                    console.log(poly);
-                    // draw added polyline right away based on resolved path
-                    DRAW.polyline(poly, {
-                        color : 'yellow',
-                        weight : 2
-                    });
 
-                    // and / or save to DB
+                     var form = document.querySelector('#myform');
+
+                    form.innerHTML = form.innerHTML + `<br><br><textarea rows="10" style="width:80%">${JSON.stringify(poly)}</textarea>`
+                    form.style.display = 'block';
+                    submit_btn.removeAttribute('disabled');
+                    btn.setAttribute('disabled', 'disabled')
+                    // optiona_form_maker(poly);
+                    // // and / or save to DB
                 })
 
-                this.innerText = "Save new polygon"
+                btn.innerText = "Draw new polygon on map";
+                // poly_name.removeAttribute('disabled');
+                // poly_content.removeAttribute('disabled');
             })
 
 
 
         }
         
+
+
+        function optiona_form_maker(poly_path){
+            var form = document.querySelector('#myform');
+            var counter = 1;
+            poly_path.forEach(poly=>{
+                form.innerHTML = form.innerHTML + `<br><br><label for="point${counter}">POINT ${counter}:</label><input style="width:80%" type="text" name="point${counter}" value="LAT: ${poly.lat}, LNG: ${poly.lng}"><br>`
+                counter++;
+            })
+        }
 
 
        

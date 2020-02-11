@@ -1,7 +1,7 @@
-import { labeledPolyline } from './lib/labeled_polyline';
-import { labeledPolylines } from './lib/labeled_polylines';
+import { labeledPolygon } from './lib/labeled_polygon';
+import { labeledPolygons } from './lib/labeled_polygons';
 
-var polyline_default_config = require('./lib/polyline_default').polyline_default;
+var polyline_default_config = require('./lib/polygon_defaults').polygon_default_values;
 
 
 
@@ -13,45 +13,50 @@ class GM_POLY_DRAW{
     // DRAWING POLYLINES BASED ON LAT LNG COORDS
     // draw single polyline. Used in polyline complete event listener. 
     // accepts array of latLng objects
-    polyline(poly_path, params){
-        if (!params) {
-            var params = polyline_default_config
-        }
-        var poly = new google.maps.Polyline({
+    polygon(poly_path, params){
+        // if (!params) {
+        //     var params = polyline_default_config
+        // }
+        var poly = new google.maps.Polygon({
             path            : poly_path,
-            strokeColor     : params.color ,
-            strokeOpacity   : params.opacity ,
-            strokeWeight    : params.weight
+            strokeColor     : params.strokeColor    ? params.strokeColor    : polyline_default_config.strokeColor,
+            strokeOpacity   : params.strokeOpacity  ? params.strokeOpacity  : polyline_default_config.strokeOpacity,
+            strokeWeight    : params.strokeWeight   ? params.strokeWeight   : polyline_default_config.strokeWeight,
+            fillColor       : params.fillColor      ? params.fillColor      : polyline_default_config.fillColor,
+            fillOpacity     : params.fillOpacity    ? params.fillOpacity    : polyline_default_config.fillOpacity
         });
         poly.setMap(this.map);
     }
 
-    labeled_polyline(poly_path, params){
+    labeled_polygon(poly_path, params){
         if (!params) { var params = {} }
-        labeledPolyline(poly_path, this.map, params);
+        labeledPolygon(poly_path, this.map, params);
     }
 
-    polylines(array_of_polygons_paths, params) {
+    polygons(array_of_polygons_paths, params) {
         // if(!params){
         //     var params = polyline_default_config
         // }
         array_of_polygons_paths.forEach(polygon_path => {
-            var poly = new google.maps.Polyline({
+            var poly = new google.maps.Polygon({
                 path            :   polygon_path,
-                strokeColor: params.color ? params.color : polyline_default_config.color,
-                strokeOpacity: params.opacity ? params.opacity : polyline_default_config.opacity ,
-                strokeWeight: params.weight ? params.weight : polyline_default_config.weight
+                strokeColor: params.strokeColor ? params.strokeColor : polyline_default_config.strokeColor,
+                strokeOpacity: params.strokeOpacity ? params.strokeOpacity : polyline_default_config.strokeOpacity,
+                strokeWeight: params.strokeWeight ? params.strokeWeight : polyline_default_config.strokeWeight,
+                fillColor: params.fillColor ? params.fillColor : polyline_default_config.fillColor,
+                fillOpacity: params.fillOpacity ? params.fillOpacity : polyline_default_config.fillOpacity
             });
             poly.setMap(this.map);
         });
     }
 
-    labeled_polylines(array_of_polyline_paths, params){
+    labeled_polygons(array_of_polyline_paths, params){
         if(!params){var params = {}}
-        labeledPolylines(array_of_polyline_paths, this, params);
+        labeledPolygons(array_of_polyline_paths, this, params);
     }
 
-    new_polyline_path(params){
+    new_polygon(params){
+        var that = this;
         return new Promise(function (resolve, reject) {
             if (typeof params != 'object' || params == undefined) return;
 
@@ -139,7 +144,19 @@ class GM_POLY_DRAW{
                         })
 
                         // resolve new polyline path. Use it in Promise .then method
-                        resolve(new_poly_path);
+
+                        if(params.title){
+                            resolve({
+                                title : params.title,
+                                coords : new_poly_path
+                            })
+                        }else{
+                            if (params.showOnEnd)
+                            {
+                                that.polygon(new_poly_path, {})
+                            }
+                            resolve(new_poly_path);
+                        }
                     }
                 });
 
