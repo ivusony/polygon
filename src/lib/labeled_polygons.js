@@ -25,26 +25,40 @@ var polyline_default_config = require('./polygon_defaults').polygon_default_valu
 //         ]
 //     }
 // ]
-exports.labeledPolygons = function(polyline_paths, obj, params){
+exports.labeledPolygons = function(polyline_paths, obj, params, polygons){
     var map = obj.map;
+    var id = 1;
     polyline_paths.forEach(polyline_path => {
-        var poly = new google.maps.Polygon({
-            path            : polyline_path.coords,
-            strokeColor     : params.strokeColor    ? params.strokeColor    : polyline_default_config.strokeColor,
-            strokeOpacity   : params.strokeOpacity  ? params.strokeOpacity  : polyline_default_config.strokeOpacity,
-            strokeWeight    : params.strokeWeight   ? params.strokeWeight   : polyline_default_config.strokeWeight,
-            fillColor       : params.fillColor      ? params.fillColor      : polyline_default_config.fillColor,
-            fillOpacity     : params.fillOpacity    ? params.fillOpacity    : polyline_default_config.fillOpacity
-        });
-        poly.setMap(map);
+        try {
+            var poly = new google.maps.Polygon({
+                path            : polyline_path.coords,
+                strokeColor     : params.strokeColor    ? params.strokeColor    : polyline_default_config.strokeColor,
+                strokeOpacity   : params.strokeOpacity  ? params.strokeOpacity  : polyline_default_config.strokeOpacity,
+                strokeWeight    : params.strokeWeight   ? params.strokeWeight   : polyline_default_config.strokeWeight,
+                fillColor       : polyline_path.fillColor ,
+                fillOpacity     : .5,
+                polygon_id      : id++
+            });
+            poly.setMap(map);
 
-        var infowindow = new google.maps.InfoWindow({
-            content: '<p style="margin:0">' +  polyline_path.label + '</p>',
-            position: polyline_path.coords[0],
-        });
+            poly.addListener('click', function(e){
+                console.log(this);
+            })
 
-        infowindow.open(map);
+            polygons.push(poly);
 
-        obj.infoWindows.push(infowindow);
+            var infowindow = new google.maps.InfoWindow({
+                content: '<p style="margin:0">' + polyline_path.label + '</p>',
+                position: polyline_path.coords[0],
+                label_id : poly.polygon_id
+            });
+
+            infowindow.open(map);
+
+            obj.infoWindows.push(infowindow);
+
+        } catch (err){
+            throw new TypeError(['Expected labeled polygons form is [ { label : label, coords : [] } ] in : labeled_polygons.js'])
+        }
     });
 }

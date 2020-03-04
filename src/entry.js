@@ -1,5 +1,6 @@
 import { labeledPolygon } from './lib/labeled_polygon';
 import { labeledPolygons } from './lib/labeled_polygons';
+import { Hide_Show_Polygon } from './lib/hide_and_show_polygon';
 
 var polyline_default_config = require('./lib/polygon_defaults').polygon_default_values;
 
@@ -9,6 +10,7 @@ class GM_POLY_DRAW{
     constructor(map) {
         this.map = map;
         this.infoWindows = [];
+        this.polygons_created = [];
     }
     // DRAWING POLYLINES BASED ON LAT LNG COORDS
     // draw single polyline. Used in polyline complete event listener. 
@@ -29,14 +31,15 @@ class GM_POLY_DRAW{
     }
 
     labeled_polygon(poly_path, params){
+        //poly_path array of objects
         if (!params) { var params = {} }
         labeledPolygon(poly_path, this.map, params);
     }
 
     polygons(array_of_polygons_paths, params) {
-        // if(!params){
-        //     var params = polyline_default_config
-        // }
+        if(!params){
+            var params = {};
+        }
         array_of_polygons_paths.forEach(polygon_path => {
             var poly = new google.maps.Polygon({
                 path            :   polygon_path,
@@ -52,7 +55,7 @@ class GM_POLY_DRAW{
 
     labeled_polygons(array_of_polyline_paths, params){
         if(!params){var params = {}}
-        labeledPolygons(array_of_polyline_paths, this, params);
+        labeledPolygons(array_of_polyline_paths, this, params, this.polygons_created);
     }
 
     new_polygon(params){
@@ -115,6 +118,8 @@ class GM_POLY_DRAW{
                 var marker_click = google.maps.event.addListener(marker, 'click', function () {
                    // if first marker is clicked
                     if (this.id == 0) {
+                        //return if the initial marker is the only one
+                        if (markers.length < 2) return;
                         // add first marker as last in array
                         markers.push({ marker: this });
                       
@@ -153,7 +158,7 @@ class GM_POLY_DRAW{
                         }else{
                             if (params.showOnEnd)
                             {
-                                that.polygon(new_poly_path, {})
+                                that.polygon(new_poly_path, {fillColor : params.fillColor, fillOpacity : .5})
                             }
                             resolve(new_poly_path);
                         }
@@ -230,7 +235,6 @@ class GM_POLY_DRAW{
         }
         return false
     }
-   
 
 }
 

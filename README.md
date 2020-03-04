@@ -1,4 +1,4 @@
-# Google Maps polyline drawing tool
+# Google Maps polygone drawing tool
 
 ## Usage
 
@@ -8,7 +8,7 @@
 var DRAW = new GM_POLY_DRAW(map);
 ```
 
-### Draw multiple polylines based on paths without labels. 
+### Draw polygons based on paths without labels. 
 
 The array passed to the function must be the following format:
 [
@@ -25,10 +25,10 @@ The array passed to the function must be the following format:
 ]
 
 ``` 
-DRAW.polylines(polyline_paths : *required / array of arrays of polyline latLng objects* , params_object : *optional / set color, weight, opacity*) : *void*;
+DRAW.polygons( polyline_paths : *required / array of arrays of polyline latLng objects* , params_object : *optional / set color, weight, opacity*) : *void*;
 ```
 
-### Draw multiple polylines based on paths WITH labels. 
+### Draw polygons based on paths WITH labels. 
 > The labels will be shown in google map info windows pointing on the first marker
 
 The array passed to the function must be the following format:
@@ -51,24 +51,23 @@ The array passed to the function must be the following format:
  }
 ]
 ```
-DRAW.labeled_polylines(labeled_polylines : *required / array of objects including labels and coords* , params_object : *optional / set color, weight, opacity*) : *void*;
+DRAW.labeled_polygons( labeled_polygons : *required / array of objects including labels and coords* , params_object : *optional / set color, weight, opacity*) : *void*;
 ```
 
-### Draw single polyline based on path without label
-```
-DRAW.polyline(polyline_path : *required / array of polyline latLng objects*, params_object : *optiona / set color, weight, opacity*) : *void*;
-```
 
-### Create new polyline path 
+### Create new polygon path 
 > returns a promise
 ```
-var new_polyline_path =  DRAW.new_polyline_path({map : *required / the map object*, markersVisible : *optional / boolean*}) : *new Promise*
+var new_polygon_path =  DRAW.new_polygon( { map : *required / the map object*, showOnEnd : true *optional / boolean / defaults to true*}) : *new Promise*
 
 new_polyline_path.then(new_path => {
   *Do what you want with new path*
-   DRAW.one_polygon(poly);
+   DRAW.polygons(poly);
 })
 ```
+The yellow marker icon represents the polygon path initial coordinates. It serves for closing and finishing the polygon, too, by clicking on it. The last coordinate of polygon path is the same as the first
+and will be auto added.
+The most recent breaking point added to the polygon is adjustable (dragabble).
 
 ### Polilyne labels
 

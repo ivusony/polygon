@@ -10,7 +10,7 @@
         #map {
             height: 400px;
             /* The height is 400 pixels */
-            width: 80%;
+            width: 100%;
             /* The width is the width of the web page */
             margin: auto;
         }
@@ -39,7 +39,7 @@
     </div>
    
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=KEY&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjT899CjEqozHEpVj5hwzlwvOLqwAFDHI&callback=initMap"></script>
 
     
 
@@ -88,7 +88,8 @@
 
             var labeled_polygon = [
                 {
-                    label: "Njiva 1",
+                    label: "Test polygon 1",
+                    fillColor : 'green',
                     coords: [
                         {
                             lat: 45.513077934215396,
@@ -113,7 +114,8 @@
                     ]
                 },
                  {
-                    label: "Njiva 2",
+                    label: "Test polygon 2",
+                    fillColor : 'red',
                     coords: [
                         {
                            lat: 45.5232321,
@@ -139,24 +141,9 @@
                 }
             ]
            
-            
-            DRAW.polygons(polygon, {
-                fillColor: 'yellow',
-                strokeWeight: 1,
-                fillOpacity: .1,
-                strokeColor: 'green',
-                strokeOpacity: 1
-            });
 
-            DRAW.labeled_polygons(labeled_polygon, {
-                fillColor: 'yellow',
-                strokeWeight: 1,
-                fillOpacity: .1,
-                strokeColor : 'green',
-                strokeOpacity : 1
-            });
+            DRAW.labeled_polygons(labeled_polygon);
 
-            // DRAW.labeled_polyline(labeled_polylines[0]);
 
             
             // *******************************
@@ -172,25 +159,24 @@
                 // initiate draw
                 DRAW.new_polygon({
                     map: map,
-                    showOnEnd : true
+                    showOnEnd : true,
+                    // optional fill color to show on drawing end. Defaults to yellow
+                    fillColor : '#fff'
                 }).then(poly => {
                     // do whatever you want with new poly path
+                  
 
-                     var form = document.querySelector('#myform');
-
-                    form.innerHTML = form.innerHTML + `<br><br><textarea rows="10" style="width:80%">${JSON.stringify(poly)}</textarea>`
-                    form.style.display = 'block';
-                    submit_btn.removeAttribute('disabled');
-                    btn.setAttribute('disabled', 'disabled')
-                    // optiona_form_maker(poly);
-                    // // and / or save to DB
+                    console.log(JSON.stringify({
+                        coords : poly,
+                        fillColor : 'red',
+                        label : "Some label"
+                    }));
                 })
 
                 btn.innerText = "Draw new polygon on map";
                 // poly_name.removeAttribute('disabled');
                 // poly_content.removeAttribute('disabled');
             })
-
 
 
         }
